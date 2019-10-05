@@ -10,8 +10,7 @@ class Starter extends React.Component {
   constructor(props) {
     super(props);
     this.channel = props.channel;
-  //  var initialLetters = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H'];
-  //  let {randomized,status} = this.AssignValues(initialLetters);
+
     this.state = {alphabets : [],
                   indisplay : [],
                   finished : [],
@@ -26,14 +25,6 @@ class Starter extends React.Component {
        .receive("error", resp => { console.log("Unable to join", resp); });
   }
 
-  //  AssignValues(initialLetters){
-  //     var randomized = _.shuffle(initialLetters);
-  //     var status = [];
-  //     for(var i=0;i<16;i++){
-  //       status[i] = "hide";
-  //     }
-  //     return {randomized,status};
-  // }
 
   got_view(view) {
     console.log("new view", view);
@@ -50,74 +41,28 @@ class Starter extends React.Component {
     alert("hax!");
   }
 
-  // setTimeoutFunc(status,indisp){
-  //   //Reffered https://javascript.info/settimeout-setinterval and https://github.com/hemanthnhs/CS5610-WebDev-HW4/blob/master/assets/js/starter-game.jsx for timer
-  //     var that = this;
-  //     setTimeout(function (){
-  //     status[indisp[0]] =  "hide";
-  //     status[indisp[1]] = "hide";
-  //     indisp.splice(0,2);
-  //     that.setState({visibilityStatus: status, indisplay: indisp});
-  //   },1000);
-  // }
 
   handleClick(e) {
     console.log("click");
     console.log(e.target.id);
-    this.channel.push("onClick", { id: e.target.id})
+    var id = e.target.id;
+    if(!(this.state.finished.length === 8 || this.state.indisplay.includes(parseInt(id)) || this.state.finished.flat().includes(parseInt(id)))){
+
+      this.channel.push("onClick", { id: e.target.id})
+          .receive("ok", this.got_view.bind(this));
+     this.channel.push("onClick2", { id: e.target.id})
         .receive("ok", this.got_view.bind(this));
-   this.channel.push("onClick2", { id: e.target.id})
-      .receive("ok", this.got_view.bind(this));
+    }
+
 
   }
-
-//   handleClick(e){
-//     var id = e.target.id;
-//     if(this.state.finished.length === 8 || this.state.indisplay.includes(id) || this.state.finished.flat().includes(id)){
-//       return;
-//     }
-//     var status = this.state.visibilityStatus;
-//     var indisp = this.state.indisplay;
-//     var complete = this.state.finished;
-//     var moves = this.state.numOfClicks;
-//
-//     if(indisp.length < 2){
-//       status[id] = "show";
-//       indisp.push(id);
-//       moves++;
-//
-//     }
-//
-//     if(indisp.length === 2){
-//       if(this.state.Alphabets[indisp[0]] === this.state.Alphabets[indisp[1]]){
-//         status[indisp[0]] = status[indisp[1]] = "show";
-//
-//         var removed=indisp.splice(0,2);
-//         complete.push(removed);
-//         console.log(this.state.finished);
-//       }
-//
-//       else {
-//         this.setTimeoutFunc(status,indisp);
-//
-//     }
-//     }
-//
-//    this.setState({visibilityStatus: status, indisplay: indisp, finished: complete,numOfClicks:moves});
-//
-// }
-
-  // handleReset(){
-  //   var initialLetters = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H'];
-  //   let {randomized,status} = this.AssignValues(initialLetters);
-  //   var complete = [];
-  //   var indisp = [];
-  //   this.setState({alphabets : randomized, indisplay: indisp, finished: complete, visibilityStatus: status,numOfClicks:0});
-  // }
 
   handleReset(){
     this.channel.push("onHandleReset", {})
         .receive("ok", this.got_view.bind(this));
+        console.log("reset");
+        console.log(this.state);
+          console.log(this.state.numOfClicks);
   }
 
   render() {
