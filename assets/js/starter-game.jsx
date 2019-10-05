@@ -29,8 +29,7 @@ class Starter extends React.Component {
   got_view(view) {
     console.log("new view", view);
     this.setState(view.game);
-    console.log(this.state.visibilityStatus)
-    console.log(this.state.alphabets)
+
   }
   swap(_ev) {
     let state1 = _.assign({}, this.state, { left: !this.state.left });
@@ -58,11 +57,9 @@ class Starter extends React.Component {
   }
 
   handleReset(){
-    this.channel.push("onHandleReset", {})
+    this.channel.push("onHandleReset", { index: 1 })
         .receive("ok", this.got_view.bind(this));
-        console.log("reset");
-        console.log(this.state);
-          console.log(this.state.numOfClicks);
+
   }
 
   render() {
