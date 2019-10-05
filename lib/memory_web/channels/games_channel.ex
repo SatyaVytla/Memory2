@@ -25,16 +25,16 @@ defmodule MemoryWeb.GamesChannel do
      end
 
      def handle_in("onClick2", %{"id" => ll}, socket) do
-     name = socket.assigns[:name]
+       name = socket.assigns[:name]
        game = Game.onClick2(socket.assigns[:game], ll)
        socket = assign(socket, :game, game)
        BackupAgent.put(name, game)
        {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
      end
 
-     def handle_in("onHandleReset", socket) do
-     name = socket.assigns[:name]
-       game = Game.onHandleReset(socket.assigns[:game])
+     def handle_in("onHandleReset", %{"index" => ll}, socket) do
+       name = socket.assigns[:name]
+       game = Game.onHandleReset(socket.assigns[:game], ll)
        socket = assign(socket, :game, game)
        BackupAgent.put(name, game)
        {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
@@ -45,3 +45,4 @@ defmodule MemoryWeb.GamesChannel do
     true
   end
 end
+
