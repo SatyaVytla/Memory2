@@ -71,7 +71,14 @@ def onClick2(game,bid) do
 end
 end
 
-def onHandleReset(game) do
-  game.new()
+def onHandleReset(game, index) do
+{randomized, status} = assignValues()
+  alphabets= randomized
+  indisplay= []
+  finished= []
+  visibilityStatus= status
+  numOfClicks= 0
+
+  game = game |> Map.put(:alphabets, alphabets) |> Map.put(:indisplay, indisplay) |> Map.put(:finished, finished) |> Map.put(:visibilityStatus, visibilityStatus) |> Map.put(:numOfClicks, numOfClicks)
   end
 end
